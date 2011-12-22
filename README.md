@@ -21,7 +21,7 @@ Make sure your code uses the same base CSS as provided in these examples.
 
 `$('nav').touchScroll(); // Creates touch-scrollable content for a 'nav' element`
 
-`$('nav').touchScroll({hScroll: true}); // Switches to horizontal scrolling. (currently only one or the other works)
+`$('nav').touchScroll({hScroll: true}); // Switches to horizontal scrolling. (currently only one or the other works)`
 
 `$('nav').touchScroll({y: 100}); // Change the initial vertical scroll position to 100 pixels down`
 
