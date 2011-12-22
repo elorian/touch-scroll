@@ -190,13 +190,13 @@
                         if (o.elastic) {
                             // Slow down outside bottom bound
                             bouncing = true;
-                            scrollX = (pollX > maxHeight) ? maxHeight : pollX ;
-                            scrollY = (pollY > maxHeight) ? maxHeight : pollY ; 
+                            scrollX = (pollX < maxWidth) ? maxWidth : pollX ;
+                            scrollY = (pollY < maxHeight) ? maxHeight : pollY ; 
                             momentumScroll(pollX - oldX, pollY - oldY, o.elasticDamp, 1, width, height, o.elasticTime);
                         } else {
                             // Stop outside bottom bound
-                            var x = (pollX > maxWidth) ? maxWidth : pollX ;
-                            var y = (pollY > maxHeight) ? maxHeight : pollY ; 
+                            var x = (pollX < maxWidth) ? maxWidth : pollX ;
+                            var y = (pollY < maxHeight) ? maxHeight : pollY ; 
                             setTransitionTime(0);
                             setPosition(x, y);
                         }
@@ -276,8 +276,8 @@
                     if (Math.abs(dx) > minDist || Math.abs(dy) > minDist) {
                         // Perform scroll
                         scrollTo(Math.round(dx), Math.round(dy), t);
+                        clampScroll(true);
                     }
-                    clampScroll(true);
                 }
                 
                 // Get the touch points from this event
@@ -412,7 +412,7 @@
                         } else if (o.momentum) {
                             // Free scroll with momentum
                             momentumScroll(movedX, movedY, isiPad ? o.iPadMomentumDamp : o.momentumDamp, 40, 2000, 2000, isiPad ? o.iPadMomentumTime : o.momentumTime);
-                        }           
+                        }
                     } else {
                         var touch = getTouches(e)[0],
                             target = getRootNode(touch.target);

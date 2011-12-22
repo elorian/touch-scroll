@@ -1,3 +1,4 @@
+# special thanks to https://github.com/tuupola/jquery_lazyload for this cool Rakefile
 task :default => [:minify]
 
 desc "Minify"
@@ -13,6 +14,6 @@ task :minify do
     end
     return false
   end
-  puts "Minifying jquery.lazyload.js with UglifyJS..."
+  puts "Minifying touch-sroll.js with UglifyJS..."
   File.open("touch-scroll.min.js", "w"){|f| f.puts Uglifier.new.compile(File.read("touch-scroll.js"))}
 end
