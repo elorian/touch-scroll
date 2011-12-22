@@ -4,7 +4,7 @@
 
 touchScroll is a jQuery plugin that provides a way to have inline scrollable content. It mimics the behaviour of scrolling on iOS devices (iPhone, iPod touch and iPad) to solve the problem that `position: fixed;` does not work in mobile Safari.
 
-- This plugin will only work for vertical-scrolling content. It has been designed with only this in mind to keep the library lightweight and efficient.
+- This plugin has been updated to work with horizontally-scrolling content. Downside is you still can't use both vertical and horizontal together. Vertical scrolling is enabled by default.
 - The code is based on [iScroll](https://github.com/cubiq/iscroll), but is a simpler (and more accurate) plugin for jQuery.
 
 For a more sophisticated scrolling library, I highly recommend [Scrollability](http://joehewitt.github.com/scrollability/), which, although not a jQuery plugin, is a very accurate and capable solution to the same problem.
@@ -20,6 +20,8 @@ Make sure your code uses the same base CSS as provided in these examples.
 ## How to use
 
 `$('nav').touchScroll(); // Creates touch-scrollable content for a 'nav' element`
+
+`$('nav').touchScroll({hScroll: true}); // Switches to horizontal scrolling. (currently only one or the other works)
 
 `$('nav').touchScroll({y: 100}); // Change the initial vertical scroll position to 100 pixels down`
 
