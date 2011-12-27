@@ -141,19 +141,20 @@
 
                 // Bounce back to the bounds after momentum scrolling
                 function reboundScroll() {
-                    if (scrollX > 0 && scrollY > 0) {
-                        scrollTo(0, 0, o.reboundTime);
-                    } else if (scrollX > 0) {
-                        scrollTo(0, scrollY, o.reboundTime);
-                    } else if (scrollY > 0) {
-                        scrollTo(scrollX, 0, o.reboundTime);
-                    } else if (scrollX < maxWidth && scrollY < maxHeight) {
-                        scrollTo(maxWidth, maxHeight, o.reboundTime);
-                    } else if (scrollX < maxWidth) {
-                        scrollTo(maxWidth, scrollY, o.reboundTime);
-                    } else if (scrollY < maxHeight) {
-                        scrollTo(scrollX, maxHeight, o.reboundTime);
+                    var doX = scrollX, doY = scrollY;
+                    if (scrollX > 0) {
+                        doX = 0;
                     }
+                    if (scrollY > 0) {
+                        doY = 0;
+                    }
+                    if (scrollX < maxWidth) {
+                        doX = maxWidth;
+                    }
+                    if (scrollY < maxHeight) {
+                        doY = maxHeight;
+                    }
+                    scrollTo(doX, doY, o.reboundTime);
                 }
 
                 // Stop everything once the CSS transition in complete
@@ -180,13 +181,13 @@
 
                     if (pollX > 0 || pollY > 0) {
                         if (o.elastic) {
-                            // Slow down outside top bound
+                            // Slow down outside near bound
                             bouncing = true;
                             scrollX = (pollX > 0) ? 0 : pollX ;
                             scrollY = (pollY > 0) ? 0 : pollY ; 
                             momentumScroll(pollX - oldX, pollY - oldY, o.elasticDamp, 1, width, height, o.elasticTime);
                         } else {
-                            // Stop outside top bound
+                            // Stop outside near bound
                             var x = (pollX > 0) ? 0 : pollX ;
                             var y = (pollY > 0) ? 0 : pollY ; 
                             setTransitionTime(0);
@@ -194,13 +195,13 @@
                         }
                     } else if (pollX < maxWidth || pollY < maxHeight) {
                         if (o.elastic) {
-                            // Slow down outside bottom bound
+                            // Slow down outside far bound
                             bouncing = true;
                             scrollX = (pollX < maxWidth) ? maxWidth : pollX ;
                             scrollY = (pollY < maxHeight) ? maxHeight : pollY ; 
                             momentumScroll(pollX - oldX, pollY - oldY, o.elasticDamp, 1, width, height, o.elasticTime);
                         } else {
-                            // Stop outside bottom bound
+                            // Stop outside far bound
                             var x = (pollX < maxWidth) ? maxWidth : pollX ;
                             var y = (pollY < maxHeight) ? maxHeight : pollY ; 
                             setTransitionTime(0);
