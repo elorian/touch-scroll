@@ -1,5 +1,5 @@
 (function($) {
-    
+
     // Define default scroll settings
     var defaults = {
         y: 0,
@@ -19,10 +19,10 @@
         iPadMomentumTime: 1200,
         touchTags: ['select', 'input', 'textarea']
     };
-    
+
     // Define methods
     var methods = {
-        
+
         init: function(options) {
             return this.each(function() {
                 
@@ -57,7 +57,7 @@
                     isiPad = !!navigator.platform.match(/ipad/i),
                     hasMatrix = 'WebKitCSSMatrix' in window,
                     has3d = hasMatrix && 'm11' in new WebKitCSSMatrix();
-                
+
                 // Keep bottom of scroll area at the bottom on resize
                 var update = this.update = function() {
 
@@ -79,37 +79,37 @@
                     clearTimeout(timeoutID);
                     clampScroll(false);
                 };
-                
+
                 // Set up initial variables
                 update();
-                
+
                 // Set up transform CSS
                 $this.css({'-webkit-transition-property': '-webkit-transform',
                     '-webkit-transition-timing-function': 'cubic-bezier(0,0,0.2,1)',
                     '-webkit-transition-duration': '0',
                     '-webkit-transform': cssTranslate(scrollX, scrollY)});
-                
+
                 // Listen for screen size change event
                 window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', update, false);
-                
+
                 // Listen for touch events
                 $this.bind('touchstart.touchScroll', touchStart);
                 $this.bind('touchmove.touchScroll', touchMove);
                 $this.bind('touchend.touchScroll touchcancel.touchScroll', touchEnd);
                 $this.bind('webkitTransitionEnd.touchScroll', transitionEnd);
-                
+
                 // Set the position of the scroll area using transform CSS
                 var setPosition = this.setPosition = function(x, y) {
                     scrollX = x;
                     scrollY = y;
                     $this.css('-webkit-transform', cssTranslate(scrollX, scrollY));
                 };
-                
+
                 // Transform using a 3D translate if available
                 function cssTranslate(x, y) {
                     return 'translate' + (has3d ? '3d(' : '(') + x + 'px,' + y + 'px' + (has3d ? ',0)' : ')');
                 }
-                
+
                 // Set CSS transition time
                 function setTransitionTime(time) {
                     time = time || '0';
@@ -127,7 +127,7 @@
                     }
                     return { x: scrollX, y: scrollY };
                 }
-                
+
                 // Expose getPosition API
                 this.getPosition = function() {
                     return getPosition();
@@ -205,7 +205,7 @@
                         timeoutID = setTimeout(clampScroll, 20, true);
                     }
                 }
-                
+
                 // Animate to a position using CSS
                 function scrollTo(destX, destY, time) {
                     if (destX === scrollX && destY === scrollY) {
@@ -216,14 +216,14 @@
                     setTransitionTime(time);
                     setPosition(destX, destY);
                 }
-                
+
                 // Perform a momentum-based scroll using CSS
                 function momentumScroll(dxin, dyin, k, minDist, maxDistX, maxDistY, t) {
                     var adx = Math.abs(dxin),
                         ady = Math.abs(dyin),
                         dx = 0,
                         dy = 0;
-                    
+
                     // Calculate the total distance
                     while (adx > 0.1) {
                         adx *= k;
@@ -233,7 +233,7 @@
                         ady *= k;
                         dy += ady;
                     }
-                    
+
                     // Limit to within min and max distances
                     if (dx > maxDistX) {
                         dx = maxDistX;
@@ -245,9 +245,9 @@
                         if (dxin < 0) {
                             dx = -dx;
                         }
-                        
+
                         dx += scrollX;
-                        
+
                         // If outside the bounds, don't go too far
                         if (width > 0) {
                             if (dx > width * 2) {
@@ -261,9 +261,9 @@
                         if (dyin < 0) {
                             dy = -dy;
                         }
-                        
+
                         dy += scrollY;
-                        
+
                         // If outside the bounds, don't go too far
                         if (height > 0) {
                             if (dy > height * 2) {
@@ -279,7 +279,7 @@
                         clampScroll(true);
                     }
                 }
-                
+
                 // Get the touch points from this event
                 function getTouches(e) {
                     if (e.originalEvent) {
@@ -291,14 +291,14 @@
                     }
                     return e.touches;
                 }
-                
+
                 // Dispatches a fake mouse event from a touch event
                 function dispatchMouseEvent(name, touch, target) {
                     var e = document.createEvent('MouseEvent');
                     e.initMouseEvent(name, true, true, touch.view, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
                     target.dispatchEvent(e);
                 }
-                
+
                 // Find the root node of this target
                 function getRootNode(target) {
                     while (target.nodeType !== 1) {
@@ -306,31 +306,31 @@
                     }
                     return target;
                 }
-                
+
                 // Perform a touch start event
                 function touchStart(e) {
                     // Allow certain HTML tags to receive touch events
                     if ($.inArray(e.target.tagName.toLowerCase(), o.touchTags) !== -1) {
                         return;
                     }
-                    
+
                     // Stop the default touches
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     var touch = getTouches(e)[0];
-                    
+
                     // Dispatch a fake mouse down event     
                     dispatchMouseEvent('mousedown', touch, getRootNode(touch.target));
-                    
+
                     scrolling = true;
                     moved = false;
                     movedX = 0;
                     movedY = 0;
-                    
+
                     clearTimeout(timeoutID);
                     setTransitionTime(0);
-                    
+
                     // Check scroll position
                     if (o.momentum) {
                         var x = getPosition().x;
@@ -344,16 +344,16 @@
                     touchX = touch.pageX - scrollX;
                     touchY = touch.pageY - scrollY;
                 }
-                
+
                 // Perform a touch move event
                 function touchMove(e) {
                     if (!scrolling) {
                         return;
                     }
-                    
+
                     var dx = getTouches(e)[0].pageX - touchX;
                     var dy = getTouches(e)[0].pageY - touchY;
-                    
+
                     // Elastic-drag or stop when moving outside of boundaries
                     if (dx > 0) {
                         if (o.elastic) {
@@ -381,7 +381,7 @@
                             dy = maxHeight;
                         }
                     }
-                    
+
                     if (o.hScroll) {
                         movedX = dx - scrollX;
                     } else {
@@ -396,15 +396,15 @@
                     moved = true;
                     setPosition(dx, dy);
                 }
-                
+
                 // Perform a touch end event
                 function touchEnd(e) {
                     if (!scrolling) {
                         return;
                     }
-                    
+
                     scrolling = false;
-                    
+
                     if (moved) {
                         // Ease back to within boundaries
                         if ((scrollX > 0 || scrollX < maxWidth) || (scrollY > 0 || scrollY < maxHeight)) {
@@ -416,7 +416,7 @@
                     } else {
                         var touch = getTouches(e)[0],
                             target = getRootNode(touch.target);
-                        
+
                         // Dispatch fake mouse up and click events if this touch event did not move
                         dispatchMouseEvent('mouseup', touch, target);
                         dispatchMouseEvent('click', touch, target);
@@ -431,7 +431,7 @@
                 this.update();
             });
         },
-        
+
         getPosition: function() {
             var a = [];
             this.each(function() {
@@ -439,15 +439,15 @@
             });
             return a;
         },
-        
+
         setPosition: function(x, y) {
             return this.each(function() {
                 this.setPosition(-x, -y);
             });
         }
-        
+
     };
-    
+
     // Public method for touchScroll
     $.fn.touchScroll = function(method) {
         if (methods[method]) {
