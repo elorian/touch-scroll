@@ -66,6 +66,9 @@
                         // width setup
                         width = $this.parent().width();
                         scrollWidth = $this.width();
+                        if (scrollWidth < width) {
+                            scrollWidth = width;
+                        }
                         maxWidth = width - scrollWidth;
                     }
 
@@ -73,6 +76,9 @@
                         // height setup
                         height = $this.parent().height();
                         scrollHeight = $this.height();
+                        if (scrollHeight < height) {
+                            scrollHeight = height;
+                        }
                         maxHeight = height - scrollHeight;
                     }
 
