@@ -75,9 +75,13 @@
                     if (o.vScroll) {
                         // height setup
                         height = $this.parent().height();
-                        scrollHeight = $this.height();
-                        if (scrollHeight < height) {
-                            scrollHeight = height;
+                        if (o.scrollHeight) {
+                            scrollHeight = o.scrollHeight;
+                        } else if ($this.prop) {
+                            // jQuery 1.6 uses .prop(), older versions use .attr()
+                            scrollHeight = $this.prop('scrollHeight');
+                        } else {
+                            scrollHeight = $this.attr('scrollHeight');
                         }
                         maxHeight = height - scrollHeight;
                     }
@@ -442,7 +446,11 @@
         getPosition: function() {
             var a = [];
             this.each(function() {
-                a.push(-this.getPosition());
+                var p = this.getPosition();
+                a.push({
+                    x: -p.x,
+                    y: -p.y
+                });
             });
             return a;
         },
